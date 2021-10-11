@@ -1,5 +1,5 @@
 import { gameboard } from "./gameboard"
-import {createPlayer} from './player'
+import {createPlayer, computerPlay} from './player'
 
 
 
@@ -7,18 +7,6 @@ const player = createPlayer('luma')
 const computer = createPlayer('pc')
 player.gb.createShips()
 computer.gb.createShips()
-// player.gb.placeShip( player.gb.allShips[0], 0, 0)
-// player.gb.placeShip( player.gb.allShips[1], 0, 5)
-// player.gb.placeShip( player.gb.allShips[2], 1, 0)
-// player.gb.placeShip( player.gb.allShips[3], 1, 3)
-// player.gb.placeShip( player.gb.allShips[4], 1, 6)
-// player.gb.receiveAttack(1,3)
-// player.gb.receiveAttack(1,4)
-// player.gb.receiveAttack(1,5)
-
-console.log(player.gb)
-console.log(player.gb.board)
-// console.log(player.gb.verifyShips())
 
 
 const newGame = (p1, p2) => {
@@ -27,20 +15,28 @@ const newGame = (p1, p2) => {
         player.gb.allShips.forEach((ship, i) => {
             let x = Math.floor(Math.random() * 10)
             let y = Math.floor(Math.random() * 10)
-            player.gb.placeShip(ship, x, y)
-        });
-        console.log( player.gb.board)
-    }
+            
+            
+            if (player.gb.placeShip(ship, x, y) === 'invalid position'){console.error(ship)
+                do{
+                    x = Math.floor(Math.random() * 10)
+                    y = Math.floor(Math.random() * 10)
+                    player.gb.placeShip(ship, x, y)
+                    console.log(player.gb.placeShip(ship, x, y), ship)
+                }while(player.gb.placeShip(ship, x, y) === 'invalid position')
+           } else player.gb.placeShip(ship, x, y)
+           console.log(ship)
+        })
+        console.log( player.gb.board, player.gb.placedShips )
+    } 
     const playTurns = () => {
         do {
-            let x1 = Math.floor(Math.random() * 10)
-            let y1 =  Math.floor(Math.random() * 10)
-            p1.gb.receiveAttack(x1, y1)
-            let x2 = Math.floor(Math.random() * 10)
-            let y2 =  Math.floor(Math.random() * 10)
-            p2.gb.receiveAttack(x2, y2)
+            let coords = computerPlay()
+            p1.gb.receiveAttack(coords[0], coords[1])
+            let coords1 = computerPlay()
+            p2.gb.receiveAttack(coords1[0], coords1[1])
         } while(p1.gb.verifyShips() !== 'sunk')
-        console.log(p1.gb.verifyShips())
+        console.log(p1.gb.verifyShips(), p1.gb.board, p2.gb.board)
     }
     return {
         placeShips, 
@@ -50,3 +46,4 @@ const newGame = (p1, p2) => {
 
 const currentGame = newGame(player, computer)
 currentGame.placeShips(player)
+// console.log(player.gb.placedShips)

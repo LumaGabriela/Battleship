@@ -14,7 +14,6 @@ export const gameboard = () => {
         const submarine = shipFactory('Submarine', 3)
         const destroyer = shipFactory('Destroyer', 2)
         allShips.push(carrier, battleship, crusier, submarine, destroyer)
-        console.log(allShips)
         return allShips
     }
 
@@ -29,10 +28,12 @@ export const gameboard = () => {
                 for(let i=0; i<ship.length; i++){
                     this.board[x + i][y] = {ship, position: i}
                     if(placedShips.indexOf(ship) === -1) placedShips.push(ship)
-                    allShips.push(ship)
                 }
             } 
-        } else console.error('cannot put ship here')   
+            return 'happy'
+        } else {
+            return 'invalid position'
+        }  
     }
     const receiveAttack = function(x, y){  
         if( typeof board[x][y] === 'object'){

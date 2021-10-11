@@ -6,6 +6,8 @@ export const createPlayer = (name) => {
     return {name, gb}
 }
 
-export const computerPlay = (computer) => {
-
+export const computerPlay = () => {
+    let x = Math.floor(Math.random() * 10)
+    let y = Math.floor(Math.random() * 10)
+    return [x,y]
 }
