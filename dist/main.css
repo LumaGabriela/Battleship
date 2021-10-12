@@ -1,0 +1,47 @@
+:root{
+    --csquare:#b6ff71;
+    --psquare:#ff7139;
+}
+body{
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+#game{
+    display: flex;
+    flex-direction: row;
+}
+.gameboard{
+    display: grid;
+    grid-template-rows: repeat(10, 1fr);
+    grid-template-columns: repeat(10,  1fr);
+    width: 15rem; height: 15rem;
+    
+}
+#shipDiv{
+    display: flex;
+    flex-direction: column;
+    align-items: center; justify-content: space-between;
+}
+#player-gameboard{
+    border: 2px solid black;
+}
+.square{
+    border:1px solid rgb(233, 69, 51);
+    cursor: pointer;
+}
+.player.square:hover{
+    background: var(--psquare);
+}
+.cpu.square:hover{
+    background: var(--csquare);
+}
+.shipImg{
+     height: 1.5rem;
+}
+.carrier{width: 7.5rem;}
+.battleship{width: 6rem;}
+.crusier, .submarine{width: 4.5rem;}
+.destroyer{width: 3rem;}

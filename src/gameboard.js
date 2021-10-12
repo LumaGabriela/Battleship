@@ -7,6 +7,9 @@ export const gameboard = () => {
     let placedShips = []
     let allShips = []
     let sunkShips = []
+    let missedAttacks = []
+    let allAttacks = []
+
     const createShips = function() {
         const carrier = shipFactory('Carrier', 5)
         const battleship = shipFactory('Battleship', 4)
@@ -17,41 +20,66 @@ export const gameboard = () => {
         return allShips
     }
 
-    const placeShip = function(ship, x, y) {
-        if(board[x][y] === undefined){
-            if(direction === 'horizontal' && (y + (ship.length-1) < board[x].length)){
-                for(let i=0; i<ship.length; i++){
-                    this.board[x][y + i] = {ship, position: i}
-                    if(placedShips.indexOf(ship) === -1) placedShips.push(ship)
-                } 
-            } else if(direction === 'vertical' && (x + (ship.length-1) < board.length)){
-                for(let i=0; i<ship.length; i++){
-                    this.board[x + i][y] = {ship, position: i}
-                    if(placedShips.indexOf(ship) === -1) placedShips.push(ship)
-                }
+    const placeShip = function( direc, ship, x, y) {
+        //Only place if the space is free
+        // check if the ship fits into the spot
+        if(direc === 'horizontal' && verifyShipPlacement(direc, ship, x, y)){
+            for(let i=0; i<ship.length; i++){
+                this.board[x][y + i] = {ship, position: i}
+                if(placedShips.indexOf(ship) === -1) placedShips.push(ship)
             } 
-            return 'happy'
+        } else if(direc === 'vertical' && verifyShipPlacement(direc, ship, x, y)){
+            for(let i=0; i<ship.length; i++){
+                this.board[x + i][y] = {ship, position: i}
+                if(placedShips.indexOf(ship) === -1) placedShips.push(ship)
+            }
+        }     
+    }
+    const verifyShipPlacement = function(direc, ship, x, y) {
+        if(board[x][y] === undefined){
+            // check if the ship fits into the spot
+            if(direc === 'horizontal' && (y + (ship.length-1) < board[x].length)){
+                return true
+            } else if(direc === 'vertical' && (x + (ship.length-1) < board.length)){
+                return true
+            } else return false
         } else {
-            return 'invalid position'
-        }  
+            return false
+        }
     }
+    //verify if the place was already attacked
+    const verifyAttack = function(x, y) {
+        allAttacks.forEach((item) => {
+            if(item[0] === x && item[1] === y){
+                false
+            }
+        })
+        return true
+    }
+    //attack the enemy's gameboard
     const receiveAttack = function(x, y){  
-        if( typeof board[x][y] === 'object'){
-            board[x][y].ship.hit(board[x][y].position)
-            board[x][y].ship.isSunk()
-            board[x][y] = 'hit'
-        }
-        else if(board[x][y] === undefined){
-            board[x][y] = 'miss'
-        }
-        verifyShips()
+        if(verifyAttack(x, y)){
+            if( typeof board[x][y] === 'object'){
+                board[x][y].ship.hit(board[x][y].position)
+                board[x][y].ship.isSunk()
+                board[x][y] = 'hit'
+                allAttacks.push([x,y])
+            }
+            else if(board[x][y] === undefined){
+                board[x][y] = 'miss'
+                allAttacks.push([x,y])
+                missedAttacks.push([x,y])
+            }
+            verifyShips()
+        }    
     }
+    //verify if the ship is sunk
     const verifyShips = function() {
         allShips.forEach((ship) => {
             if(ship.isSunk()) sunkShips.push(ship)
         })
-        if (sunkShips.length === 5) return 'sunk'
-        else return 'not sunk'
+        if (sunkShips.length === 5) return 'lose'
+        else return 'playing'
     }
     const resetAll = function(){
         allShips = []
@@ -64,8 +92,12 @@ export const gameboard = () => {
         direction,
         placedShips,
         allShips,
+        sunkShips,
+        missedAttacks,
         createShips,
         placeShip,
+        verifyShipPlacement,
+        verifyAttack,
         receiveAttack,
         verifyShips,
         resetAll
