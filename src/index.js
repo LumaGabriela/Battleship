@@ -4,9 +4,7 @@ import { dragShip } from './drag'
 export const player = createPlayer('luma')
 const cpu = createPlayer('pc')
 
-
 export const game = ((p1, p2) => {
-    let turn = 0
     // Place ships on the board
     const placeShips = (player, dir, x1, y1, auto, shipIndex) => {
         if(auto === true){

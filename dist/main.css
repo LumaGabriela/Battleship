@@ -2,6 +2,7 @@
     --csquare:#b6ff71;
     --psquare:#ff7139;
 }
+*, *::after, *::before{box-sizing: border-box;}
 body{
     margin: 0;
     width: 100%;
@@ -17,8 +18,8 @@ body{
 }
 .gameboard{
     display: grid;
-    grid-template-rows: repeat(10, 1fr);
-    grid-template-columns: repeat(10,  1fr);
+    grid-template-rows: repeat(10, 1.5rem);
+    grid-template-columns: repeat(10,  1.5rem);
     width: 15rem; height: 15rem;
     
 }
@@ -43,29 +44,21 @@ body{
     background: var(--csquare);
 }
 .shipImg{
-     height: 1.5rem;
-     position: absolute;
-     cursor:grab;
-     background-color: #c0e0ff !important;
-     background-repeat: no-repeat !important;
-     border-radius: 2px;
+    height: 1.5rem;
+    width: 1.5rem;
+    cursor:grab;
+    border-radius: 2px;
+    border:1px solid #55555579;
 }
-.carrier{width: 7.5rem; background-size: 60% !important;
-    background-position: 50% !important;
+.shipContainer{
+    display: flex;
+    flex-direction: row;
 }
-.battleship{width: 6rem;transform: translateY(3rem);
-    background-size: 120% !important;
-    background-position: 50%  45% !important;
-}
-.crusier{width: 4.5rem;transform: translateY(6rem);
-    background-size: 160% !important;
-    background-position: 50% 48% !important;
-}
-.submarine{width: 4.5rem;transform: translateY(9rem);
-    background-size: 150% !important;
-    background-position: 50% !important;
-}
-.destroyer{width: 3rem;transform: translateY(12rem);
-    background-size: 200% !important;
-    background-position: 50% !important;
+.carrier{}
+.battleship{}
+.crusier{}
+.submarine{}
+.destroyer{}
+.drag{
+    transform: scale(1.1);
 }

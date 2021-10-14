@@ -23,7 +23,6 @@ export const gameboard = () => {
     const placeShip = function( direc, ship, x, y) {
         //Only place if the space is free
         // check if the ship fits into the spot
-        console.log({direc, ship, x, y})
         if(direc === 'horizontal' && verifyShipPlacement(direc, ship, x, y)){
             for(let i=0; i<ship.length; i++){
                 this.board[x][y + i] = {ship, position: i}
@@ -44,7 +43,7 @@ export const gameboard = () => {
             } else if(direc === 'vertical' && (x + (ship.length-1) < board.length)){
                 return true
             } else return false
-        } else {
+        } else {window.alert('gb.js:46' + board[x][y])
             return false
         }
     }
