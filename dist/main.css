@@ -8,10 +8,12 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background: #000;
 }
 #game{
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
 }
 .gameboard{
     display: grid;
@@ -22,14 +24,16 @@ body{
 }
 #shipDiv{
     display: flex;
+    height: 15rem; width: 7.5rem;
     flex-direction: column;
     align-items: center; justify-content: space-between;
 }
 #player-gameboard{
-    border: 2px solid black;
+    border: none;
 }
 .square{
-    border:1px solid rgb(233, 69, 51);
+    border:1px solid #3f6196;
+    background: #2e3b81;
     cursor: pointer;
 }
 .player.square:hover{
@@ -40,8 +44,28 @@ body{
 }
 .shipImg{
      height: 1.5rem;
+     position: absolute;
+     cursor:grab;
+     background-color: #c0e0ff !important;
+     background-repeat: no-repeat !important;
+     border-radius: 2px;
 }
-.carrier{width: 7.5rem;}
-.battleship{width: 6rem;}
-.crusier, .submarine{width: 4.5rem;}
-.destroyer{width: 3rem;}
+.carrier{width: 7.5rem; background-size: 60% !important;
+    background-position: 50% !important;
+}
+.battleship{width: 6rem;transform: translateY(3rem);
+    background-size: 120% !important;
+    background-position: 50%  45% !important;
+}
+.crusier{width: 4.5rem;transform: translateY(6rem);
+    background-size: 160% !important;
+    background-position: 50% 48% !important;
+}
+.submarine{width: 4.5rem;transform: translateY(9rem);
+    background-size: 150% !important;
+    background-position: 50% !important;
+}
+.destroyer{width: 3rem;transform: translateY(12rem);
+    background-size: 200% !important;
+    background-position: 50% !important;
+}

@@ -9,7 +9,7 @@ export const gameboard = () => {
     let sunkShips = []
     let missedAttacks = []
     let allAttacks = []
-
+   
     const createShips = function() {
         const carrier = shipFactory('Carrier', 5)
         const battleship = shipFactory('Battleship', 4)
@@ -23,6 +23,7 @@ export const gameboard = () => {
     const placeShip = function( direc, ship, x, y) {
         //Only place if the space is free
         // check if the ship fits into the spot
+        console.log({direc, ship, x, y})
         if(direc === 'horizontal' && verifyShipPlacement(direc, ship, x, y)){
             for(let i=0; i<ship.length; i++){
                 this.board[x][y + i] = {ship, position: i}
@@ -33,7 +34,7 @@ export const gameboard = () => {
                 this.board[x + i][y] = {ship, position: i}
                 if(placedShips.indexOf(ship) === -1) placedShips.push(ship)
             }
-        }     
+        } 
     }
     const verifyShipPlacement = function(direc, ship, x, y) {
         if(board[x][y] === undefined){
@@ -87,6 +88,7 @@ export const gameboard = () => {
         let board = Array(10).fill(undefined).map((x) => Array(10).fill(undefined))
         return allShips, placedShips, board
     }
+    createShips()
     return{
         board,
         direction,
