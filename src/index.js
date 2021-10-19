@@ -1,8 +1,8 @@
-import {createPlayer, computerPlay} from './player'
+import { createPlayer } from './player'
 import { render } from './UI'
-import { dragShip } from './drag'
-export const player = createPlayer('luma')
-const cpu = createPlayer('pc')
+
+export const player = createPlayer('player')
+export const cpu = createPlayer('cpu')
 
 export const game = ((p1, p2) => {
     // Place ships on the board
@@ -11,58 +11,69 @@ export const game = ((p1, p2) => {
             player.gb.allShips.forEach((ship) => {
                 let x = Math.floor(Math.random() * 10)
                 let y = Math.floor(Math.random() * 10)
-            
-                if (player.gb.verifyShipPlacement(dir, ship, x, y) === false ){
-                    while(player.gb.verifyShipPlacement(dir, ship, x, y) === false){
+                let d = Math.floor(Math.random() * 2)
+                if(d === 1) d = 'horizontal'
+                else d = 'vertical'
+                if (player.gb.verifyShipPlacement(d, ship, x, y) === false ){
+                    while(player.gb.verifyShipPlacement(d, ship, x, y) === false){
                         x = Math.floor(Math.random() * 10)
                         y = Math.floor(Math.random() * 10)   
                     } 
-                    player.gb.placeShip(dir ,ship, x, y)
-            } else player.gb.placeShip(dir,ship, x, y)
+                    player.gb.placeShip(d,ship, x, y)
+            } else player.gb.placeShip(d,ship, x, y)
             })
         } else {
             let ship = player.gb.allShips[shipIndex]
             if (player.gb.verifyShipPlacement(dir, ship, x1, y1) === false ){
                 window.alert('Invalid position')
-            } else {
-                p1.gb.placeShip(dir,ship, x1, y1)
-                console.table(p1.gb.board)
-            }
+            } else p1.gb.placeShip(dir,ship, x1, y1)                
         }
+        if(p1.gb.placedShips.length === 5)render.start()                        
+        console.table(player.gb.board)
     } 
     //Play game turns, player x cpu
-    const playTurn = function(player, auto) {
+    const playTurn = function(p, x1, y1, auto) {
         if(auto === true){
             let x = Math.floor(Math.random() * 10)
             let y = Math.floor(Math.random() * 10)
-            if(!player.gb.verifyAttack(x,y)){
-                while(!player.gb.verifyAttack(x,y)){
+            if(!p.gb.verifyAttack(x,y)){
+                while(!p.gb.verifyAttack(x,y)){
                     x = Math.floor(Math.random() * 10)
                     y = Math.floor(Math.random() * 10)
                 }
-                player.gb.receiveAttack(x, y)
-            } else player.gb.receiveAttack(x, y)
-        console.table(player.gb.board)
-           
-        } else return 'to be implemented'
+                p.gb.receiveAttack(x, y)
+                render.updateGrid(p, x, y)
+            } else {p.gb.receiveAttack(x, y);render.updateGrid(p, x, y)}
+        } else {
+            p.gb.receiveAttack(x1, y1 )
+            render.updateGrid(p, x1, y1)
+            console.log(p2.gb)
+        }        
+    }
+    const isWinner = function(){
+        if(p1.gb.verifyShips() === 'lose') return `${p2.name}`
+        else if(p2.gb.verifyShips() === 'lose') return `${p1.name}`
     }
     const play = function() {
-        //placeShips(p2, 'horizontal', 0, 0, true, 0) 
+         render.attack()
     }
-    const dragShip = function() {
-
+    const restartAll = function(){
+        p1.gb.resetAll()
+        p2.gb.resetAll()
+        render.grid('player')
+        render.showShips()
+        game.play()
     }
+    placeShips(p2, 'horizontal', 0, 0, true, 0)
     return {
         placeShips, 
         playTurn,
-        play
+        isWinner,
+        play,
+        restartAll
     }
 })(player, cpu)
 
-
-
-game.play(player, cpu)
-
 render.grid('player')
-// displayGameboard.grid('cpu')
 render.showShips()
+game.play()

@@ -1,10 +1,15 @@
-import { player } from "./index"
+import { player, cpu , game } from "./index"
 import { drag } from "./drag"
 export const render = (() => {
-    let game = document.querySelector('#game')
-    const grid = (name) => {        
+    
+    const grid = (name) => {     
+        let game = document.querySelector('#game')
+        let player = document.createElement('div')
+        player.id = `${name}`
+        let info = document.createElement('div')
         let grid = document.createElement('div')
-        grid.setAttribute('id', `${name}-gameboard`)
+        info.id = `${name}-info`
+        grid.id = `${name}-gameboard`
         grid.setAttribute('class', 'gameboard')
         let i = 0
         while(i<100) {
@@ -31,21 +36,24 @@ export const render = (() => {
             }
             i++
         }
-    game.appendChild(grid)
+    player.appendChild(grid)
+    player.appendChild(info)
+    game.appendChild(player)
     }
     const showShips = () => {
         let shipDiv = document.createElement('div')
+        let game = document.querySelector('#game')
         shipDiv.id = 'shipDiv'
+        // Creates a instruction div
+        let info = document.createElement('div')
+        info.id = 'info-div' 
+        //  creates ships divs
         let carrier = document.createElement('div')
         let battleship = document.createElement('div')
         let submarine = document.createElement('div')
         let crusier = document.createElement('div')
         let destroyer = document.createElement('div')
-        // carrier.style.background = 'url(./imgs/carrier.png) 50%'
-        // battleship.style.background = 'url(./imgs/battleship.png)'
-        // submarine.style.background = 'url(./imgs/submarine.png)'
-        // crusier.style.background = 'url(./imgs/crusier.png)'
-        // destroyer.style.background = 'url(./imgs/destroyer.png)'
+        // puts as many divs as the ship's length inside them
         let ships = [carrier, battleship, submarine, crusier, destroyer]
         let id = ['carrier', 'battleship', 'submarine', 'crusier', 'destroyer']
         game.appendChild(shipDiv)
@@ -56,18 +64,87 @@ export const render = (() => {
             ships[i].setAttribute('draggable', true) 
             ships[i].setAttribute('class', `${id[i]} shipContainer` )
             ships[i].setAttribute('data-ship', `${i}`)
-            shipDiv.appendChild(ships[i])
-            
-            drag(ships[i])
-            
+            shipDiv.appendChild(ships[i])           
+            drag(ships[i])           
         }
-        return ships
     }
-
-
+    const updateGrid = function(p, x, y) {
+        let square = document.querySelector(`.${p.name}[data-x='${x}'][data-y='${y}']`)
+        if(p.gb.board[x][y] === 'hit'){
+            if(square.children[0]) square.removeChild(square.children[0])
+            square.style.background = 'url(../dist/imgs/boom.png)'
+        } else if(p.gb.board[x][y] === 'miss'){
+            square.style.backgroundImage = 'url(../dist/imgs/times.png)'
+        }        
+    }
+    const start = function(){
+        render.grid('cpu')
+        attack()
+    }
+    const attack = function(){
+        let squares = document.querySelectorAll(`.cpu.square`)
+        let info = document.querySelector('#game-info')
+        for (let s of squares) s.onclick = (e) => {
+            let cell = e.target
+            let x = Number(cell.dataset.x)
+            let y = Number(cell.dataset.y)
+            game.playTurn(cpu, x, y, false)
+            updateGame()
+            for(let c of squares) c.onclick = null
+            setTimeout(() => {
+                game.playTurn(player, 0, 0, true)  
+                attack()      
+                s.onclick = null        
+            },100)           
+            updateGame()
+        }        
+    }
+    const updateGame = function(){        
+        let pInfo = document.querySelector('#player-info')
+        let cInfo = document.querySelector('#cpu-info')
+        pInfo.innerHTML = `Player remaining ships: ${player.gb.remainingShips.length}`
+        cInfo.innerHTML = `CPU remaining ships: ${cpu.gb.remainingShips.length}`
+        verifyVictory()
+    }
+    const verifyVictory = function(){
+        let info = document.querySelector('#game-info')
+        if(game.isWinner() === 'cpu') {
+            info.innerHTML = `CPU won`
+            stopGame()
+        }
+        else if(game.isWinner() === 'player') {
+            info.innerHTML = `Player Won`
+            stopGame()
+        }
+        console.log(game.isWinner())
+    }
+    const stopGame = function(){
+        let restartBtn = document.querySelector('#restart-game')
+        restartBtn.classList.add('active')
+        restartBtn.onclick = () => {
+            restart
+            restartBtn.classList.remove('active')
+        } 
+        let info = document.querySelector('#game-info')
+        info.innerHTML += `Play again?`
+        
+    }   
+    const restart = function(){ 
+        let squares = document.querySelector('.square')
+        for ( let s of squares){
+            s.background = ''
+            if(s.children[0]) s.removeChild(s.children[0])
+        }
+        (document.querySelector('#game')).removeChild(document.querySelector('#cpu'))
+        game.restartAll()
+        start()
+    }
     return {
         grid,
-        showShips
+        showShips,
+        updateGrid,
+        start,
+        attack
     }
 })()
 

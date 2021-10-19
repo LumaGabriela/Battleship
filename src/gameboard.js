@@ -6,17 +6,20 @@ export const gameboard = () => {
     let direction = 'horizontal'
     let placedShips = []
     let allShips = []
+    let remainingShips = []
     let sunkShips = []
     let missedAttacks = []
     let allAttacks = []
    
     const createShips = function() {
+        allShips = []
         const carrier = shipFactory('Carrier', 5)
         const battleship = shipFactory('Battleship', 4)
         const crusier = shipFactory('Crusier', 3)
         const submarine = shipFactory('Submarine', 3)
         const destroyer = shipFactory('Destroyer', 2)
         allShips.push(carrier, battleship, crusier, submarine, destroyer)
+        remainingShips.push(carrier, battleship, crusier, submarine, destroyer)
         return allShips
     }
 
@@ -43,25 +46,20 @@ export const gameboard = () => {
             } else if(direc === 'vertical' && (x + (ship.length-1) < board.length)){
                 return true
             } else return false
-        } else {window.alert('gb.js:46' + board[x][y])
-            return false
-        }
+        } else return false        
     }
     //verify if the place was already attacked
     const verifyAttack = function(x, y) {
-        allAttacks.forEach((item) => {
-            if(item[0] === x && item[1] === y){
-                false
-            }
-        })
-        return true
+        for (let item of allAttacks) {
+            if(item[0] === x && item[1] === y) return false                        
+        }
+    return true    
     }
     //attack the enemy's gameboard
     const receiveAttack = function(x, y){  
         if(verifyAttack(x, y)){
             if( typeof board[x][y] === 'object'){
                 board[x][y].ship.hit(board[x][y].position)
-                board[x][y].ship.isSunk()
                 board[x][y] = 'hit'
                 allAttacks.push([x,y])
             }
@@ -75,15 +73,27 @@ export const gameboard = () => {
     }
     //verify if the ship is sunk
     const verifyShips = function() {
-        allShips.forEach((ship) => {
-            if(ship.isSunk()) sunkShips.push(ship)
-        })
+        for(let ship of placedShips) {
+            if(ship.isSunk() && sunkShips.indexOf(ship) === -1) {console.log(ship.isSunk()) ;sunkShips.push(ship)}
+        }
+        getRemainingShips()
+        console.log(sunkShips)
         if (sunkShips.length === 5) return 'lose'
         else return 'playing'
     }
+    const getRemainingShips = function(){
+        for (let s of remainingShips){
+            for (let sunk of sunkShips) {
+                if(sunk === s) { remainingShips.splice(remainingShips.indexOf(s),1)}          
+            }
+        }
+    }
+    // reset game
     const resetAll = function(){
         allShips = []
         placedShips = []
+        remainingShips = []
+        sunkShips = []
         let board = Array(10).fill(undefined).map((x) => Array(10).fill(undefined))
         return allShips, placedShips, board
     }
@@ -94,6 +104,7 @@ export const gameboard = () => {
         placedShips,
         allShips,
         sunkShips,
+        remainingShips,
         missedAttacks,
         createShips,
         placeShip,
