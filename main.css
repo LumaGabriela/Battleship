@@ -1,6 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
 :root{
     --csquare:#b6ff71;
     --psquare:#ff7139;
+    --white: #ccc6c2;
+    --dark:#001935;
+
 }
 *, *::after, *::before{box-sizing: border-box;}
 body{
@@ -9,33 +13,89 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: #000;
+    background: var(--dark);
+    color: var(--white);
+    font-family: 'Varela Round', sans-serif;
+}
+#header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 3rem;
+    background: var(--dark);
+    font-family: 'Courier New', Courier, monospace;
+}
+#header-link{text-decoration: none; 
+    color: var(--psquare); font-size: 2.9rem;
+    cursor: pointer;
+    font-family: inherit;
+}
+/* Rules */
+#game-info{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;    
+}
+/* start button */
+#restart-game{
+    font-family: inherit;
+    font-size: 1.8rem;
+    width: 8rem; height: 2rem;
+    cursor: pointer; margin: 1rem 0;
+    color: var(--psquare);
+    background: var(--dark);
+    border: none;
+    filter: blur(2rem);
+    visibility: hidden;
+    transition: filter 1s ease-in-out, visibility .5s ease-in-out;
+}
+#restart-game.active{filter: blur(0); visibility: visible;}
+#main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    ;
 }
 #game{
     display: flex;
     flex-direction: row;
+    width: 100%; margin: 1rem 0;
     justify-content: space-evenly;
+}
+svg{
+    width: 1rem !important; height: 1rem !important;
 }
 .gameboard{
     display: grid;
     grid-template-rows: repeat(10, 1.5rem);
     grid-template-columns: repeat(10,  1.5rem);
     width: 15rem; height: 15rem;
-    
 }
 #shipDiv{
     display: flex;
-    height: 15rem; width: 7.5rem;
-    flex-direction: column;
+    height: 15rem; width: 10rem;
+    flex-direction:unset;
+    flex-wrap: wrap;
     align-items: center; justify-content: space-between;
 }
 #player-gameboard{
     border: none;
 }
+#cpu-gameboard{
+    animation: blur .6s ease-in-out forwards;
+}
+@keyframes blur {
+    0%{filter: blur(3rem);}
+    100%{filter: blur(0rem);}
+}
 .square{
     border:1px solid #3f6196;
     background: #2e3b81;
     cursor: pointer;
+    background-size: 100% !important;
+    background-position: 100% !important;
 }
 .player.square:hover{
     background: var(--psquare);
@@ -46,19 +106,14 @@ body{
 .shipImg{
     height: 1.5rem;
     width: 1.5rem;
-    cursor:grab;
+    cursor:pointer;
     border-radius: 2px;
     border:1px solid #55555579;
+    background-size: 100% !important;
 }
+.shipImg.ver{transform: rotate(90deg);}
 .shipContainer{
     display: flex;
     flex-direction: row;
 }
-.carrier{}
-.battleship{}
-.crusier{}
-.submarine{}
-.destroyer{}
-.drag{
-    transform: scale(1.1);
-}
+.shipContainer.vertical{flex-direction: column;}
