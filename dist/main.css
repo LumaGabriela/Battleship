@@ -1,10 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+@font-face {
+    font-family: Pixel;
+    src: url(./Silkscreen/slkscr.ttf);
+}
 :root{
-    --csquare:#b6ff71;
-    --psquare:#ff7139;
-    --white: #ccc6c2;
+    --green:#b6ff71;
+    --yellow: #fda521;    
+    --orange:#ff7139;
+    --red: #f84848;
     --dark:#001935;
-
+    --dark1:#06062e;
+    --dark2:#00001a;
+    --blue: #b3e1ff;
 }
 *, *::after, *::before{box-sizing: border-box;}
 body{
@@ -14,8 +21,8 @@ body{
     flex-direction: column;
     justify-content: center;
     background: var(--dark);
-    color: var(--white);
-    font-family: 'Varela Round', sans-serif;
+    color: var(--red);
+    font-family: 'Courier New', Courier, monospace;
 }
 #header{
     display: flex;
@@ -24,62 +31,49 @@ body{
     width: 100%;
     height: 3rem;
     background: var(--dark);
-    font-family: 'Courier New', Courier, monospace;
+    
 }
 #header-link{text-decoration: none; 
-    color: var(--psquare); font-size: 2.9rem;
+    color: var(--orange); font-size: 2.9rem;
     cursor: pointer;
     font-family: inherit;
 }
 /* Rules */
 #game-info{
-    display: flex;
+    display: flex; margin: 0;
     align-items: center;
+    text-align: center;
+    font-size: 1.2rem;
     justify-content: space-evenly;
-    width: 100%;    
+    background: var(--dark2);
+    width: 100%;   height: 5rem;  
 }
-/* start button */
-#restart-game{
-    font-family: inherit;
-    font-size: 1.8rem;
-    width: 8rem; height: 2rem;
-    cursor: pointer; margin: 1rem 0;
-    color: var(--psquare);
-    background: var(--dark);
-    border: none;
-    filter: blur(2rem);
-    visibility: hidden;
-    transition: filter 1s ease-in-out, visibility .5s ease-in-out;
-}
-#restart-game.active{filter: blur(0); visibility: visible;}
+#game-info h3 {margin: 0;}
+
 #main{
     display: flex;
     flex-direction: column;
     align-items: center;
-    ;
+    justify-content: center;
 }
 #game{
     display: flex;
     flex-direction: row;
-    width: 100%; margin: 1rem 0;
+    width: 100%; margin: 0;
+    align-items: center;
     justify-content: space-evenly;
 }
 svg{
-    width: 1rem !important; height: 1rem !important;
+    color: var(--dark1);
+    width: 1.5rem !important; height: 1.5rem !important;
 }
 .gameboard{
-    display: grid;
+    display: grid; margin: 1rem 0;
     grid-template-rows: repeat(10, 1.5rem);
     grid-template-columns: repeat(10,  1.5rem);
     width: 15rem; height: 15rem;
 }
-#shipDiv{
-    display: flex;
-    height: 15rem; width: 10rem;
-    flex-direction:unset;
-    flex-wrap: wrap;
-    align-items: center; justify-content: space-between;
-}
+
 #player-gameboard{
     border: none;
 }
@@ -90,25 +84,43 @@ svg{
     0%{filter: blur(3rem);}
     100%{filter: blur(0rem);}
 }
+@keyframes attack {
+    0%{transform: scale(.7);}
+    100%{transform: scale(1.1);}
+}
+/* Squares */
 .square{
-    border:1px solid #3f6196;
-    background: #2e3b81;
+    border:.05rem solid #3f6196;
+    background: var(--blue);
     cursor: pointer;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-size: 100% !important;
     background-position: 100% !important;
 }
-.player.square:hover{
-    background: var(--psquare);
+.square > div {
+    height: 100%; width: 100%;
 }
 .cpu.square:hover{
-    background: var(--csquare);
+    background: var(--green);
+}
+/* Ships */
+#shipDiv{
+    display: flex;
+    height: 15rem; width: 13rem;
+    padding: 3rem 0 0;
+    flex-direction:unset;
+    flex-wrap: wrap;
+    align-items: center; justify-content: space-between;
 }
 .shipImg{
     height: 1.5rem;
     width: 1.5rem;
     cursor:pointer;
     border-radius: 2px;
-    border:1px solid #55555579;
+    border:none;
     background-size: 100% !important;
 }
 .shipImg.ver{transform: rotate(90deg);}
@@ -117,3 +129,39 @@ svg{
     flex-direction: row;
 }
 .shipContainer.vertical{flex-direction: column;}
+/* Buttons */
+button{
+    font-family: Pixel;
+    font-weight: 500;
+    cursor: pointer; 
+    border-radius: 5px;
+    font-size: 1.9rem;
+    width: 11rem; height: 2rem;
+    margin: .5rem; 
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+}
+button:hover{background: var(--dark1);}
+#start-game{
+    color: var(--green);
+}
+#random-btn{
+    color: var(--yellow);
+    position: absolute;
+    transform: translateY(-7rem);
+}
+#restart-game{    
+    color: var(--orange);
+    filter: blur(2rem);
+    visibility: hidden;
+    transition: filter 1s ease-in-out, visibility .1s ease-in-out;
+}
+#restart-game.active{filter: blur(0); visibility: visible ;}
+@media screen and ( max-width: 540px){
+    #game{
+        flex-direction:column;
+    }
+
+}
