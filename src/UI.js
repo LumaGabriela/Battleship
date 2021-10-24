@@ -63,7 +63,7 @@ export const render = (() => {
         game.appendChild(shipDiv)
         for(let i in ships) {
             for( let j=0; j< player.gb.allShips[i].length; j++){
-                ships[i].innerHTML += `<div data-id='${i}' data-position='${j}' style="background:url(/dist/imgs/${id[i]}/${id[i]}${j}.png)" class='${id[i]} shipImg'>`
+                ships[i].innerHTML += `<div data-id='${i}' data-position='${j}' style="background:url(./imgs/${id[i]}/${id[i]}${j}.png)" class='${id[i]} shipImg'>`
             }
             ships[i].setAttribute('draggable', true) 
             ships[i].setAttribute('class', `${id[i]} shipContainer` )
