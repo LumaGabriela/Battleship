@@ -44,6 +44,7 @@ export const game = ((p1, p2) => {
         } else {
             p.gb.receiveAttack(x1, y1 )
             render.updateGrid(p, x1, y1)
+            // console.table(player.gb.board)
         }      
         isWinner()
     }

@@ -74,7 +74,6 @@ export const render = (() => {
     }
     const updateGrid = function(p, x, y) {
         let square = document.querySelector(`.${p.name}[data-x='${x}'][data-y='${y}']`)
-        if (p.name === 'cpu')
         if(p.gb.board[x][y] === 'hit'){
             if(square.children[0]) square.removeChild(square.children[0])
             square.style.background = 'url(./imgs/boom.png)'
