@@ -4,16 +4,19 @@ export const shipFactory = (name, len) => {
     let hitPosition = []
     let sunk = false
     const hit = function(pos) {
-        hitPosition.push(pos)
-        isSunk()
-        return hitPosition
+        this.hitPosition.push(pos)
     }
     const isSunk = function() {
-        if(hitPosition.length === length) {
-            sunk = true
-        } else sunk = false
-        return sunk
+        if(this.hitPosition.length === length) this.sunk = true            
+        else this.sunk = false
+        return this.sunk
     }
-    return {id, length, hitPosition, sunk, hit, isSunk}
+    return {id, 
+        length, 
+        hitPosition, 
+        sunk, 
+        hit, 
+        isSunk, 
+        }
 }
 

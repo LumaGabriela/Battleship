@@ -3,7 +3,6 @@ import { render } from './UI'
 
 export const player = createPlayer('player')
 export const cpu = createPlayer('cpu')
-
 export const game = ((p1, p2) => {
     // Place ships on the board
     const placeShips = (player, dir, x1, y1, auto, shipIndex) => {
@@ -27,44 +26,56 @@ export const game = ((p1, p2) => {
             if (player.gb.verifyShipPlacement(dir, ship, x1, y1) === false ){
                 window.alert('Invalid position')
             } else p1.gb.placeShip(dir,ship, x1, y1)                
-        }
-        if(p1.gb.placedShips.length === 5)render.start()                        
-        console.table(player.gb.board)
+        }                        
     } 
     //Play game turns, player x cpu
     const playTurn = function(p, x1, y1, auto) {
         if(auto === true){
             let x = Math.floor(Math.random() * 10)
-            let y = Math.floor(Math.random() * 10)
+            let y = Math.floor(Math.random() * 10)            
             if(!p.gb.verifyAttack(x,y)){
                 while(!p.gb.verifyAttack(x,y)){
                     x = Math.floor(Math.random() * 10)
                     y = Math.floor(Math.random() * 10)
-                }
+                }                
                 p.gb.receiveAttack(x, y)
                 render.updateGrid(p, x, y)
             } else {p.gb.receiveAttack(x, y);render.updateGrid(p, x, y)}
         } else {
             p.gb.receiveAttack(x1, y1 )
             render.updateGrid(p, x1, y1)
-            console.log(p2.gb)
-        }        
+            console.log([p1.gb.allAttacks, p2.gb.allAttacks, p2.gb.sunkShips])
+        }      
+        isWinner()
     }
     const isWinner = function(){
-        if(p1.gb.verifyShips() === 'lose') return `${p2.name}`
-        else if(p2.gb.verifyShips() === 'lose') return `${p1.name}`
+        if(p1.gb.verifyShips() === 'lose') {console.log(`${p2.name}` );return `${p2.name}`}
+        else if(p2.gb.verifyShips() === 'lose') {console.log(`${p1.name}` );return `${p1.name}`}
+        
     }
     const play = function() {
-         render.attack()
+        placeShips(p2, 'horizontal', 0, 0, true, 0)
+        render.grid('player')
+        render.showShips()    
+        document.querySelector('#start-game').style.display = 'flex'
+        document.querySelector('#start-game').onclick = () => {
+            if (p1.gb.placedShips.length === 5) {
+            render.start()
+            document.querySelector('#random-btn').remove()
+            document.querySelector('#shipDiv').remove()
+            document.querySelector('#start-game').style.display = 'none'
+            document.querySelector('#start-game').onclick = null
+            }
+        }
     }
     const restartAll = function(){
         p1.gb.resetAll()
-        p2.gb.resetAll()
-        render.grid('player')
-        render.showShips()
+        p2.gb.resetAll()  
+        // p1.gb.allShips.forEach(ship => ship.resetHits())
+        // p2.gb.allShips.forEach(ship => ship.resetHits())
         game.play()
-    }
-    placeShips(p2, 'horizontal', 0, 0, true, 0)
+        console.log([p2.gb.allShips, p2.gb.placedShips])
+    }    
     return {
         placeShips, 
         playTurn,
@@ -74,6 +85,4 @@ export const game = ((p1, p2) => {
     }
 })(player, cpu)
 
-render.grid('player')
-render.showShips()
 game.play()
