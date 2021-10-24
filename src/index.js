@@ -44,13 +44,12 @@ export const game = ((p1, p2) => {
         } else {
             p.gb.receiveAttack(x1, y1 )
             render.updateGrid(p, x1, y1)
-            console.log([p1.gb.allAttacks, p2.gb.allAttacks, p2.gb.sunkShips])
         }      
         isWinner()
     }
     const isWinner = function(){
-        if(p1.gb.verifyShips() === 'lose') {console.log(`${p2.name}` );return `${p2.name}`}
-        else if(p2.gb.verifyShips() === 'lose') {console.log(`${p1.name}` );return `${p1.name}`}
+        if(p1.gb.verifyShips() === 'lose') return `${p2.name}`
+        else if(p2.gb.verifyShips() === 'lose') return `${p1.name}`
         
     }
     const play = function() {
@@ -71,10 +70,7 @@ export const game = ((p1, p2) => {
     const restartAll = function(){
         p1.gb.resetAll()
         p2.gb.resetAll()  
-        // p1.gb.allShips.forEach(ship => ship.resetHits())
-        // p2.gb.allShips.forEach(ship => ship.resetHits())
         game.play()
-        console.log([p2.gb.allShips, p2.gb.placedShips])
     }    
     return {
         placeShips, 

@@ -74,10 +74,10 @@ export const render = (() => {
     }
     const updateGrid = function(p, x, y) {
         let square = document.querySelector(`.${p.name}[data-x='${x}'][data-y='${y}']`)
-        if (p.name === 'cpu')console.table(p.gb.board)
+        if (p.name === 'cpu')
         if(p.gb.board[x][y] === 'hit'){
             if(square.children[0]) square.removeChild(square.children[0])
-            square.style.background = 'url(../dist/imgs/boom.png)'
+            square.style.background = 'url(./imgs/boom.png)'
             square.style.animation = 'attack .5s ease-in'
         } else if(p.gb.board[x][y] === 'miss'){
             square.innerHTML = '<i class="fas fa-times"></i>'
@@ -113,7 +113,6 @@ export const render = (() => {
         let cInfo = document.querySelector('#cpu-info')
         pInfo.innerHTML = `Player remaining ships: ${5 - player.gb.sunkShips.length}`
         cInfo.innerHTML = `CPU remaining ships: ${5 - cpu.gb.sunkShips.length}`
-        console.log([player.gb.sunkShips, cpu.gb.sunkShips])
         verifyVictory()
     }
     const verifyVictory = function(){

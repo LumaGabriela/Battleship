@@ -96,7 +96,6 @@ export const drag = function(ship){
                 dropShip(x,y,d, id)
             }
         })    
-        console.table(player.gb.board)
     }
     const dragListeners = function() {
         randomBtn.onmouseup = (e) => {

@@ -91,7 +91,6 @@ export const gameboard = function() {
         this.missedAttacks = []
         this.board = getBoard()
         allShips.forEach(ship => ship.hitPosition = [])    
-        console.log(allShips, this.allShips)
     }
     createShips()
     return{
