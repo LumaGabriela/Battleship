@@ -2,6 +2,7 @@
 
 This project has been created using **webpack-cli**, you can now run
 
+Preview: https://lumagabriela.github.io/Battleship/
 ```
 npm run build
 ```
